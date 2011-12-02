@@ -1,8 +1,110 @@
-<script src="socket.io.js"></script>
+<!--<script src="socket.io.js"></script>
 <script>
-  var socket = io.connect('http://192.168.88.241:81');
-  socket.on('news', function (data) {
+  var s = io.connect('http://192.168.88.241:81');
+  
+	s.emit('nickname', 'p1mp1$');
+  
+/*  s.on('message', function (data) {
     console.log(data);
-    socket.emit('my other event', { my: 'data' });
-  });
+    s.emit('nickname', { param: 'parameters' });
+  });*/
+</script>-->
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>BackNode Chat v0.1337</title>
+		<script type="text/javascript" src="socket.io.js"></script>
+	</head>
+	<body>
+
+<script>
+	var s = io.connect('http://192.168.88.241:81');
+	
+	/*
+		PINGING
+	*/
+	s.on('ping', function (data) {
+		console.log('ping received: ' + data + '; ponged back');
+		s.emit('pong', data);
+		conlog('Ping? Pong!');
+	});
+	
+	/*
+		DISCONNECTED
+	*/
+	s.on('disconnect' , function (data) {
+		console.log('Disconnected by server :( (' + data + ')');
+		conlog('Disconnected by server! (' + data + ')');
+	});
+	
+	/*
+		GLOBAL INFO
+	*/
+	s.on('info' , function (data) {
+		console.log('Info: ' + data);
+		conlog(data);
+	});
+	
+	/*
+		MOVED
+	*/
+	s.on('move' , function (data) {
+		console.log('Moved: ', data);
+	});
+	
+	/*SAYGLOBAL INFO
+	*/
+	s.on('say' , function (data) {
+		console.log('Say; ', data);
+		conlog(data.name + ' says: ' + data.message);
+	});
+
+	/*function ping()
+	{
+		console.log("pinging server...");
+		var time = new Date();
+		//window.alert(time.getTime());
+		s.emit('ping', time.getTime());
+	}
+	setInterval("ping();", 3000);*/
+
+s.on('positions', function (data) {
+console.log(data);
+//s.emit('nickname', { param: 'parameters' });
+});
+
+function conlog(msg)
+{
+	$('messages').innerHTML = msg + '<br>' + $('messages').innerHTML;
+}
+
+function $(id)
+{
+	return document.getElementById(id);
+}
+  
+function connect()
+{
+	s.emit('nickname', $('nickname').value);
+	$('splash').style.display = 'none';
+	$('console').style.display = 'block';
+	$('field').style.display = 'block';
+}
 </script>
+		
+		<div id="splash">
+			Enter your name: <input type="text" id="nickname"> <input type="submit" onclick="connect(); return false;" value="Join!">
+		</div>
+		
+		<div id="console" style="display: none; position: absolute; top: 0; left: 0; z-index: 999999; border-bottom: 1px solid #000; width: 100%;">
+			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
+			<input type="text" id="cmd" value=""> <input type="text" id="param" value=""> <input type="submit" name="submit" value="Send" onclick="s.emit(document.getElementById('cmd').value, document.getElementById('param').value); return false;">
+		</div>
+	
+		<div id="field" style="display: none; width: 100%; height: 100%; position: relative;">
+		
+		</div>
+		
+	</body>
+</html>
