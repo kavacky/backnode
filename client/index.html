@@ -129,15 +129,16 @@ function update_positions(users) {
 
 		var char_dom = $('#' + user.id);
 
-		console.log(user.id);
+		console.log(user);
+
 
 		if (!char_dom.length) {
 			$('#field').append('<div class="char" id="' + user.id + '"><span>'+user.name+'</span><img src="../img/down.gif" /></div>')			
 			var char_dom = $('#' + user.id);
 		}
 
-		char_dom.css('top', user.y);
-		char_dom.css('left', user.x);
+		char_dom.css('top', user.y + '%');
+		char_dom.css('left', user.x + '%');
 
 	}
 
