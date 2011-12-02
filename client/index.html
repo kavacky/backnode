@@ -73,10 +73,10 @@
 
 function conlog(msg)
 {
-	$('messages').innerHTML = msg + '<br>' + $('messages').innerHTML;
+	$$('messages').innerHTML = msg + '<br>' + $('messages').innerHTML;
 }
 
-function $(id)
+function $$(id)
 {
 	return document.getElementById(id);
 }
@@ -84,9 +84,9 @@ function $(id)
 function connect()
 {
 	s.emit('nickname', $('nickname').value);
-	$('splash').style.display = 'none';
-	$('console').style.display = 'block';
-	$('field').style.display = 'block';
+	$$('splash').style.display = 'none';
+	$$('console').style.display = 'block';
+	$$('field').style.display = 'block';
 }
 
 document.onkeyup = function(e)
@@ -123,17 +123,21 @@ function update_positions(users) {
 	
 	for (var i in users) {
 		
+
+
 		var user = users[i];
 
-		var char = $('#' + user.id);
+		var char_dom = $('#' + user.id);
 
-		if (!char.length) {
-			$('#field').append('<div class="char" id="' + user.id + '"><span></span><img src="../img/down.gif" /></div>')			
-			var char = $('#' + user.id);
+		console.log(user.id);
+
+		if (!char_dom.length) {
+			$('#field').append('<div class="char" id="' + user.id + '"><span>'+user.name+'</span><img src="../img/down.gif" /></div>')			
+			var char_dom = $('#' + user.id);
 		}
 
-		var.css('top', user.y);
-		var.css('left', user.x);
+		char_dom.css('top', user.y);
+		char_dom.css('left', user.x);
 
 	}
 
