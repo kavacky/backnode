@@ -58,28 +58,43 @@ io.sockets.on('connection', function (socket) {
 
 			switch(direction) {
 				case 'up':
-					users[socket.id].y -= 1;
-					users[socket.id].move_lock = true;
-					clear_move(socket.id);
-					broadcast_user_position(socket.id);
+
+					if (users[socket.id].y > 0) {
+						users[socket.id].y -= 1;
+						users[socket.id].move_lock = true;
+						clear_move(socket.id);
+						broadcast_user_position(socket.id);
+					}
 					break;
+
 				case 'down':
-					users[socket.id].y += 1;
-					users[socket.id].move_lock = true;	
-					clear_move(socket.id);	
-					broadcast_user_position(socket.id);
+
+					if (users[socket.id].y < 100) {
+						users[socket.id].y += 1;
+						users[socket.id].move_lock = true;	
+						clear_move(socket.id);	
+						broadcast_user_position(socket.id);						
+					}
 					break;
+
 				case 'left':
-					users[socket.id].x -= 1;
-					users[socket.id].move_lock = true;
-					clear_move(socket.id);	
-					broadcast_user_position(socket.id);
+
+					if (users[socket.id].x > 0) {
+						users[socket.id].x -= 1;
+						users[socket.id].move_lock = true;
+						clear_move(socket.id);	
+						broadcast_user_position(socket.id);
+					}
 					break;
+
 				case 'right':
-					users[socket.id].x += 1;
-					users[socket.id].move_lock = true;	
-					clear_move(socket.id);	
-					broadcast_user_position(socket.id);
+
+					if (users[socket.id].x < 100) {
+						users[socket.id].x += 1;
+						users[socket.id].move_lock = true;	
+						clear_move(socket.id);	
+						broadcast_user_position(socket.id);
+					}
 					break;
 												
 				default:
@@ -101,7 +116,7 @@ io.sockets.on('connection', function (socket) {
 function clear_move(user_id) {
 	setTimeout(function() {
 		users[user_id].move_lock = false;
-	}, 1000);
+	}, 100);
 }
 
 

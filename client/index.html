@@ -3,6 +3,9 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<title>BackNode Chat v0.1337</title>
 		<script type="text/javascript" src="socket.io.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+		
+
 	</head>
 	<body style="margin: 0; padding: 0;">
 
@@ -114,19 +117,89 @@ document.onkeyup = function(e)
 		break;
 	}
 }
+
+
+function update_positions(positions) {
+	
+
+
+
+
+
+/*			<div class="char">
+				<span>adomak</span>
+				<img src="../img/down.gif" />
+			</div>*/
+
+
+
+}
+
+
+
+
+
 </script>
 		
+
+<style>
+
+body, html {
+	font-family: Arial;
+}
+
+#console {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 280px;
+}
+
+#field {
+	position: absolute;
+	top: 280px;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: url(http://img9.imageshack.us/img9/7047/shrubbase.jpg);
+}
+
+
+.char {
+	width: 50px;
+	text-align: center;
+	display: block;
+	height: 46px;
+	margin: -12px 0 0 0;
+	position: absolute;
+	top: 10%;
+	left: 10%;
+}
+.char span {
+	display: block;
+	background: black;
+	border-radius: 3px;
+	color: #fff;
+	font-size: 11px;
+	margin: 0 0 5px 0;
+}
+
+</style>
+
 		<div id="splash">
 			Enter your name: <input type="text" id="nickname"> <input type="submit" onclick="connect(); return false;" value="Join!">
 		</div>
 		
-		<div id="console" style="display: none; position: absolute; top: 0; left: 0; z-index: 999999; border-bottom: 1px solid #000; width: 100%;">
+		<div id="console">
+			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
 			<input type="text" id="cmd" value=""> <input type="text" id="param" value=""> <input type="submit" name="submit" value="Send" onclick="s.emit(document.getElementById('cmd').value, document.getElementById('param').value); return false;">
 			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
 		</div>
 	
-		<div id="field" style="display: none; width: 100%; height: 100%; position: relative; background: #EFE;">
-		
+
+		<div id="field" style="display: none">
 		</div>
 		
 	</body>
