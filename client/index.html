@@ -1,15 +1,3 @@
-<!--<script src="socket.io.js"></script>
-<script>
-  var s = io.connect('http://192.168.88.241:81');
-  
-	s.emit('nickname', 'p1mp1$');
-  
-/*  s.on('message', function (data) {
-    console.log(data);
-    s.emit('nickname', { param: 'parameters' });
-  });*/
-</script>-->
-
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -54,6 +42,7 @@
 	*/
 	s.on('move' , function (data) {
 		console.log('Moved: ', data);
+		update_positions(data);
 	});
 	
 	/*
@@ -73,10 +62,14 @@
 	}
 	setInterval("ping();", 3000);*/
 
-s.on('positions', function (data) {
-console.log(data);
-//s.emit('nickname', { param: 'parameters' });
-});
+	/*
+		INIT ALL USERS
+	*/
+	s.on('positions', function (data) {
+		console.log(data);
+		update_positions(data);
+	});
+	
 
 function conlog(msg)
 {
