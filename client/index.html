@@ -16,7 +16,7 @@
 		<title>BackNode Chat v0.1337</title>
 		<script type="text/javascript" src="socket.io.js"></script>
 	</head>
-	<body>
+	<body style="margin: 0; padding: 0;">
 
 <script>
 	var s = io.connect('http://192.168.88.241:81');
@@ -53,7 +53,8 @@
 		console.log('Moved: ', data);
 	});
 	
-	/*SAYGLOBAL INFO
+	/*
+		SAYGLOBAL INFO
 	*/
 	s.on('say' , function (data) {
 		console.log('Say; ', data);
@@ -83,13 +84,42 @@ function $(id)
 {
 	return document.getElementById(id);
 }
-  
+
 function connect()
 {
 	s.emit('nickname', $('nickname').value);
 	$('splash').style.display = 'none';
 	$('console').style.display = 'block';
 	$('field').style.display = 'block';
+}
+
+document.onkeyup = function(e)
+{
+	e = e || window.event;
+	
+	switch (e.keyCode)
+	{
+		case 38:
+			s.emit('move', 'up');
+		break;
+		
+		case 40:
+			s.emit('move', 'down');
+		break;
+		
+		case 37:
+			s.emit('move', 'left');
+		break;
+		
+		case 39:
+			s.emit('move', 'right');
+		break;
+		
+		case 27:
+			//s.emit('move', 'up');
+			window.alert('quitting?');
+		break;
+	}
 }
 </script>
 		
@@ -147,10 +177,13 @@ body, html {
 		<div id="console">
 			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
 			<input type="text" id="cmd" value=""> <input type="text" id="param" value=""> <input type="submit" name="submit" value="Send" onclick="s.emit(document.getElementById('cmd').value, document.getElementById('param').value); return false;">
+			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
 		</div>
 	
+
 		<div id="field" style="display: none">
-		
+
+
 			<div class="char">
 				<span>adomak</span>
 				<img src="../img/down.gif" />
