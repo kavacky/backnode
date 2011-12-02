@@ -18,7 +18,7 @@
 	s.on('ping', function (data) {
 		console.log('ping received: ' + data + '; ponged back');
 		s.emit('pong', data);
-		conlog('Ping? Pong!');
+		//conlog('Ping? Pong!');
 	});
 	
 	/*
@@ -51,6 +51,16 @@
 	s.on('say' , function (data) {
 		console.log('Say; ', data);
 		conlog(data.name + ' says: ' + data.message);
+
+
+		$('#' + data.id).append('<div class="message"><b>' + data.message + '</b></div>');
+
+		setTimeout(function() {
+			$('#' + data.id).find('.message:last').fadeOut(function() {
+				$(this).remove();
+			});
+		}, 3000);
+
 	});
 
 	/*function ping()
@@ -73,7 +83,7 @@
 
 function conlog(msg)
 {
-	$$('messages').innerHTML = msg + '<br>' + $('messages').innerHTML;
+	$$('messages').innerHTML = msg + '<br>' + $$('messages').innerHTML;
 }
 
 function $$(id)
@@ -83,7 +93,7 @@ function $$(id)
 
 function connect()
 {
-	s.emit('nickname', $('nickname').value);
+	s.emit('nickname', $$('nickname').value);
 	$$('splash').style.display = 'none';
 	$$('console').style.display = 'block';
 	$$('field').style.display = 'block';
@@ -123,19 +133,35 @@ function update_positions(users) {
 	
 	for (var i in users) {
 		
-
-
 		var user = users[i];
 
 		var char_dom = $('#' + user.id);
 
-		console.log(user);
-
-
 		if (!char_dom.length) {
 			$('#field').append('<div class="char" id="' + user.id + '"><span>'+user.name+'</span><img src="../img/down.gif" /></div>')			
 			var char_dom = $('#' + user.id);
+			char_dom.css('top', user.y + '%');
+			char_dom.css('left', user.x + '%');			
 		}
+
+		var img = char_dom.find('img');
+
+
+		var old_x = parseInt(char_dom[0].style.left);
+		var old_y = parseInt(char_dom[0].style.top);
+
+		if (old_x > user.x) {
+			img.attr('src', '../img/left.gif');
+		}
+		if (old_x < user.x) {
+			img.attr('src', '../img/right.gif');
+		}
+		if (old_y < user.y) {
+			img.attr('src', '../img/down.gif');
+		}
+		if (old_y > user.y) {
+			img.attr('src', '../img/up.gif');
+		}		
 
 		char_dom.css('top', user.y + '%');
 		char_dom.css('left', user.x + '%');
@@ -164,6 +190,10 @@ body, html {
 	left: 0;
 	right: 0;
 	height: 280px;
+	background: gray;
+	font-size: 12px;
+	padding: 5px;
+	color: black;
 }
 
 #field {
@@ -172,7 +202,7 @@ body, html {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: url(http://img9.imageshack.us/img9/7047/shrubbase.jpg);
+	background: url(../img/shrubbase.jpg);
 }
 
 
@@ -193,6 +223,25 @@ body, html {
 	color: #fff;
 	font-size: 11px;
 	margin: 0 0 5px 0;
+	opacity: 0.8;
+}
+
+.char .message {
+	font-size: 12px;
+	margin: -69px 0 0 -75px;
+	overflow: hidden;
+	width: 200px;	
+	text-align: center;
+}
+.char .message b {
+	border-radius: 3px 3px 3px 3px;	
+	opacity: 0.8;
+	display: inline-block;
+	padding: 3px;
+	font-size: 11px;
+	color: green;	
+	font-weight: normal;
+	background: none repeat scroll 0 0 black;		
 }
 
 </style>
@@ -202,8 +251,8 @@ body, html {
 		</div>
 		
 		<div id="console">
-			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
-			<input type="text" id="cmd" value=""> <input type="text" id="param" value=""> <input type="submit" name="submit" value="Send" onclick="s.emit(document.getElementById('cmd').value, document.getElementById('param').value); return false;">
+			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 240px;"></div>
+			<input type="text" id="cmd" value="say"> <input type="text" id="param" value=""> <input type="submit" name="submit" value="Send" onclick="s.emit(document.getElementById('cmd').value, document.getElementById('param').value); return false;">
 			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
 		</div>
 	

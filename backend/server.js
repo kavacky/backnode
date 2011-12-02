@@ -144,6 +144,10 @@ function send_positions() {
 			y : users[i].y
 		}
 	}
+
+	console.log(json);
+
+
 	return json;
 }
 
@@ -182,7 +186,5 @@ function disconnect(socket) {
 		delete users[socket.id];
 		
 	}
-
-	console.log('USER DISCONNECTED');	
 
 }
