@@ -103,6 +103,38 @@
 
 	});
 
+
+	/*
+		SAYGLOBAL INFO
+	*/
+	s.on('frag' , function (data) {
+
+		var user = $('#' + data.id);
+
+		var pos = user.offset();
+
+
+		$('body').append('<img style="top: '+(pos.top+10)+'px; left: '+(pos.left+10)+'px" class="exp" src="../img/explosion.gif" />');
+
+		$('body img.exp:last').fadeOut(1000, function() {
+			$(this).remove();
+		});
+
+
+		user.css({
+			left : data.new_x + '%',
+			top : data.new_y + '%'
+		});
+
+		conlog( $('#' + data.killer + ' span').text() + ' killed ' + $('#' + data.id + ' span').text() );
+
+
+
+
+	});
+
+
+
 	/*function ping()
 	{
 		console.log("pinging server...");
@@ -354,6 +386,15 @@ body, html {
 	z-index: 999px;
 }
 
+
+.exp {
+	position: absolute;
+	width: 36px;
+}
+
+
+
+
 </style>
 
 		<div id="splash">
@@ -369,6 +410,7 @@ body, html {
 
 		<div id="field" style="display: none">
 		</div>
+
 
 	</body>
 </html>

@@ -281,7 +281,7 @@ function broadcast_instagib(killer, victim) {
 		users[victim].action_lock = false;
 		
 		var frag = {};
-		frag[victim] = {
+		frag = {
 			id : victim,
 			killer: killer,
 			weapon: 'instagib',
