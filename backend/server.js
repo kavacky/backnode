@@ -217,6 +217,15 @@ function broadcast_user_position(user_id) {
 function broadcast_instagib(killer, victim) {
 
 	io.sockets.emit('info', killer.nickname + ' killed ' + victim.nickname);
+	
+	users[victim.id].x = 50;
+	users[victim.id].y = 50;
+	users[victim.id].direction = 'down';
+	users[victim.id].move_lock = false;
+	users[victim.id].action_lock = false;
+	
+	// @TODO: emit action -> instagib + params
+	// @TODO: user respawn @ center
 
 }
 
