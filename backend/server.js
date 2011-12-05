@@ -147,13 +147,17 @@ io.sockets.on('connection', function (socket) {
 	
 		var date = new Date();
 
-		io.sockets.emit('say', {
-			id : socket.id,
-			name : users[socket.id].name,
-			message : message,
-			time : date.getHours() + ':' + date.getMinutes()
-		} );		
-	
+		if (users[socket.id] != undefined) {
+			
+			io.sockets.emit('say', {
+				id : socket.id,
+				name : users[socket.id].name,
+				message : message,
+				time : date.getHours() + ':' + date.getMinutes()
+			} );	
+				
+		}
+
 	});
 
 	
@@ -296,18 +300,27 @@ io.sockets.on('connection', function (socket) {
 	Re-enables user to move again (flood protection)
 */
 function clear_move(user_id) {
-	setTimeout(function() {
-		users[user_id].move_lock = false;
-	}, 100);
+
+	if (users[user_id] != undefined) {
+		setTimeout(function() {
+			users[user_id].move_lock = false;
+		}, 100);
+	}
 }
 
 /*
 	Re-enables user to do something again (flood protection)
 */
 function clear_action(user_id, timeout) {
-	setTimeout(function() {
-		users[user_id].action_lock = false;
-	}, timeout);
+
+	if (users[user_id] != undefined) {
+
+		setTimeout(function() {
+			users[user_id].action_lock = false;
+		}, timeout);		
+
+	}
+
 }
 
 /*
