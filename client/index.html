@@ -65,15 +65,20 @@
 	*/
 	s.on('action' , function (data) {
 
-		console.log('SHOT');
-
-		if (data.action == 'instagib') {
+	
+		for (var i in data) {
 			
-			shoot_laser( data.id, data.direction );
+			var user = data[i];	
+
+
+			if (user.action == 'instagib') {
+
+				shoot_laser( user.id, user.direction );
+
+			}
+
 
 		}
-
-
 
 	});
 
