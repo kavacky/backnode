@@ -221,17 +221,29 @@ function shoot_laser(user_id, direction) {
 
 	var pos = user.offset();
 
-
-	console.log('SHOOTING', direction);
-
 	if (direction == 'left') {
+		$('body').append('<div class="laser laser_h" style="top: '+(pos.top + 29)+'px; width: ' + (pos.left + 18)  +'px; left: 0" id="laser_'+ user_id +'" />');
 
-		$('body').append('<div class="laser_h" style="top: '+(pos.top+27)+'px; right: ' + (pos.left-20)  +'px; left: 0" id="laser_'+ user_id +'" />');
+		$('body .laser:last').fadeOut(400, function() { $(this).remove() });
 
 	}
+	if (direction == 'right') {
+		$('body').append('<div class="laser laser_h" style="top: '+(pos.top + 29)+'px; left: ' + (pos.left + 28)  +'px; right: 0" id="laser_'+ user_id +'" />');
 
+		$('body .laser:last').fadeOut(400, function() { $(this).remove() });
+	}
 
-	
+	if (direction == 'up') {
+		$('body').append('<div class="laser laser_v" style="top: 0; height: ' + (pos.top)  +'px; left: ' + (pos.left + 22) + '" id="laser_'+ user_id +'" />');
+
+		$('body .laser:last').fadeOut(400, function() { $(this).remove() });
+	}
+
+	if (direction == 'down') {
+		$('body').append('<div class="laser laser_v" style="top: '+(pos.top + 33)+'px; left: ' + (pos.left + 25)  +'px; height: 100%;" id="laser_'+ user_id +'" />');
+
+		$('body .laser:last').fadeOut(400, function() { $(this).remove() });
+	}	
 
 
 }
@@ -245,6 +257,7 @@ function shoot_laser(user_id, direction) {
 
 body, html {
 	font-family: Arial;
+	overflow: hidden;
 }
 
 #console {
@@ -267,6 +280,7 @@ body, html {
 	right: 0;
 	bottom: 0;
 	background: url(../img/shrubbase.jpg);
+	overflow: hidden;
 }
 
 
