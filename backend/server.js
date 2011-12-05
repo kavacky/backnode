@@ -1,7 +1,45 @@
 io = require('socket.io').listen(81);
 
 var users = {};
+var talk = [];
 
+
+talk[1] = 'BITCHES';
+talk[2] = 'LITTLE PUSSIES';
+talk[3] = 'MOTHERFUCKERS';
+talk[4] = 'MIDGET SEX';
+talk[5] = 'DO YOU HAVE A PROBLEM?';
+talk[6] = 'WALK AWAY!';
+talk[7] = 'YOU ALL GOING TO DIE!!';
+
+var mob = {};
+
+function mob_say() {
+	
+	var date = new Date();
+
+	io.sockets.emit('say', {
+		id : 'boss',
+		name : mob.name,
+		message : talk[Math.floor(Math.random()*8)],
+		time : date.getHours() + ':' + date.getMinutes()
+	} );	
+
+	setTimeout(mob_say, Math.floor(Math.random()*14000));
+}
+
+
+mob = {
+	id : 'boss',
+	x : 30,
+	y : 20,
+	name : 'TEH BOSS',
+	move_lock : false,
+	sprite : 'mob.gif'
+};
+
+
+mob_say();
 
 io.sockets.on('connection', function (socket) {
 
@@ -164,8 +202,7 @@ function send_positions() {
 		}
 	}
 
-	console.log(json);
-
+	json['boss'] = mob;
 
 	return json;
 }

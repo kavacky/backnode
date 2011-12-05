@@ -145,6 +145,9 @@ document.onkeyup = function(e)
 
 function update_positions(users) {
 	
+
+	console.log(users);
+
 	for (var i in users) {
 		
 		var user = users[i];
@@ -152,7 +155,10 @@ function update_positions(users) {
 		var char_dom = $('#' + user.id);
 
 		if (!char_dom.length) {
-			$('#field').append('<div class="char" id="' + user.id + '"><span>'+user.name+'</span><img src="../img/down.gif" /></div>')			
+
+			var sprite = (i=='boss') ? 'mob.gif' : 'down.gif';
+
+			$('#field').append('<div class="char' + ((i=='boss') ? ' boss' : '') + '" id="' + user.id + '"><span>'+user.name+'</span><img src="../img/'+sprite+'" /></div>')			
 			var char_dom = $('#' + user.id);
 			char_dom.css('top', user.y + '%');
 			char_dom.css('left', user.x + '%');			
@@ -239,7 +245,6 @@ body, html {
 	margin: 0 0 5px 0;
 	opacity: 0.8;
 }
-
 .char .message {
 	font-size: 12px;
 	margin: -69px 0 0 -75px;
@@ -257,6 +262,15 @@ body, html {
 	font-weight: normal;
 	background: none repeat scroll 0 0 black;		
 }
+.boss {
+	width: 130px;
+}
+.boss .message {
+	font-size: 12px;
+	margin: -165px 0 0 -75px;
+	width: 279px;
+}
+
 
 </style>
 
