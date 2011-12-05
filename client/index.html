@@ -10,6 +10,13 @@
 	<body style="margin: 0; padding: 0;">
 
 <script>
+
+	$(document).ready(function() {
+		
+		$('<img src="../img/explosion2.gif" />'); // preload
+
+	});
+
 	var s = io.connect('http://192.168.88.241:81');
 	
 	/*
@@ -132,12 +139,15 @@
 		var pos = user.offset();
 
 
-		$('body').append('<img style="top: '+(pos.top+10)+'px; left: '+(pos.left+10)+'px" class="exp" src="../img/explosion.gif" />');
+		$('body').append('<img style="top: '+(pos.top-130)+'px; left: '+(pos.left-5)+'px" class="exp" src="../img/explosion2.gif" />');
 
-		$('body img.exp:last').fadeOut(1500, function() {
-			$(this).remove();
-		});
+		var last = $('body img.exp:last');
 
+		setTimeout(function() {
+			
+			last.remove();
+
+		}, 1000);
 
 		user.css({
 			left : data.new_x + '%',
@@ -326,6 +336,32 @@ body, html {
 	overflow: hidden;
 }
 
+
+input[type=text] {
+	border: 1px solid gray;
+	padding: 2px;
+}
+
+body {
+	background: url(../img/status_bg.png) no-repeat center center #3C5A76;
+}
+#splash h1 {
+	padding: 0 0 20px 0;
+	margin: 0;
+	font-size: 26px;
+	color: #fff;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.7);
+	text-align: center;
+}
+#splash {
+	width: 340px;
+	color: #fff;
+	margin: 0 auto;
+	margin-top: 300px;
+}
+#splash h1 b {
+	font-size: 14px;
+}
 #console {
 	display: none;
 	position: absolute;
@@ -333,10 +369,10 @@ body, html {
 	left: 0;
 	right: 0;
 	height: 267px;
-	background: gray;
+	background: none repeat scroll 0 0 rgba(0, 0, 0, 0.9);
 	font-size: 12px;
 	padding: 5px;
-	color: black;
+	color: gray;
 	border-bottom: 3px solid black;
 }
 
@@ -421,7 +457,7 @@ body, html {
 
 .exp {
 	position: absolute;
-	width: 36px;
+	width: 60px;
 }
 
 
@@ -464,8 +500,10 @@ body, html {
 
 </style>
 
+
 		<div id="splash">
-			Enter your name: <input type="text" id="nickname"> <input type="submit" onclick="connect(); return false;" value="Join!">
+			<h1>BackNode Chat <b>v0.1337</b></h1>
+			Enter your name: &nbsp; <input type="text" id="nickname"> <input type="submit" onclick="connect(); return false;" value="Join!">
 		</div>
 		
 		<div id="console">
