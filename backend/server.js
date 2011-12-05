@@ -224,6 +224,8 @@ function broadcast_instagib(killer, victim) {
 	users[victim.id].move_lock = false;
 	users[victim.id].action_lock = false;
 	
+	broadcast_user_position(victim.id);
+	
 	// @TODO: emit action -> instagib + params
 	// @TODO: user respawn @ center
 
