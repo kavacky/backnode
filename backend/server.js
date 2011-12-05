@@ -12,8 +12,11 @@ talk[5] = 'DO YOU HAVE A PROBLEM?';
 talk[6] = 'WALK AWAY!';
 talk[7] = 'YOU ALL GOING TO DIE!!';
 
-var mob = {};
+var mob = {}; // TEH BOSS
 
+/*
+	Boss talking shit
+*/
 function mob_say() {
 	
 	var date = new Date();
@@ -28,7 +31,6 @@ function mob_say() {
 	setTimeout(mob_say, 5000 + Math.floor(Math.random()*10000));
 }
 
-
 mob = {
 	id : 'boss',
 	x : 30,
@@ -38,11 +40,12 @@ mob = {
 	sprite : 'mob.gif'
 };
 
-
 mob_say();
 
+/*
+	MAIN
+*/
 io.sockets.on('connection', function (socket) {
-
 
 	// PING
 	socket.on('pong', function(token) {
@@ -54,6 +57,7 @@ io.sockets.on('connection', function (socket) {
 
 	});
 
+	
 	// AUTH
 	socket.on('nickname', function(nickname) {
 
@@ -76,7 +80,6 @@ io.sockets.on('connection', function (socket) {
 
 	});
 
-
 	// SAY
 	socket.on('say', function(message) {
 	
@@ -91,10 +94,9 @@ io.sockets.on('connection', function (socket) {
 	
 	});
 
+	
 	// MOVE
 	socket.on('move', function(direction) {
-
-
 
 		if (users[socket.id] != undefined && !users[socket.id].move_lock) {
 
@@ -150,6 +152,7 @@ io.sockets.on('connection', function (socket) {
 
 	});
 	
+	
 	// ACTION
 	socket.on('action', function(action) {
 
@@ -158,6 +161,7 @@ io.sockets.on('connection', function (socket) {
 			broadcast_action(socket.id, action);
 
 			switch(action) {
+			
 				case 'instagib':
 
 					users[socket.id].action_lock = true;
@@ -204,7 +208,6 @@ io.sockets.on('connection', function (socket) {
 
 	// DISCONNECT
 	socket.on('disconnect', function() {
-
 		
 		if (users[socket.id] != undefined) {
 
@@ -218,29 +221,33 @@ io.sockets.on('connection', function (socket) {
 			io.sockets.emit('remove', user );
 		}
 
-
-
 		disconnect(socket);
-
 		
 	});
 
 });
 
-
+/*
+	Re-enables user to move again (flood protection)
+*/
 function clear_move(user_id) {
 	setTimeout(function() {
 		users[user_id].move_lock = false;
 	}, 100);
 }
 
+/*
+	Re-enables user to do something again (flood protection)
+*/
 function clear_action(user_id, timeout) {
 	setTimeout(function() {
 		users[user_id].action_lock = false;
 	}, timeout);
 }
 
-
+/*
+	User moved
+*/
 function broadcast_user_position(user_id) {
 
 	var pos = {};
@@ -254,6 +261,9 @@ function broadcast_user_position(user_id) {
 	io.sockets.emit('move',  pos );
 }
 
+/*
+	Send reply to action
+*/
 function broadcast_action(user_id, action) {
 
 	if (users[user_id] != undefined) {
@@ -270,6 +280,9 @@ function broadcast_action(user_id, action) {
 	}
 }
 
+/*
+	Send reply to kill
+*/
 function broadcast_instagib(killer, victim) {
 
 	if (users[victim] != undefined) {
@@ -295,10 +308,6 @@ function broadcast_instagib(killer, victim) {
 		io.sockets.emit('frag', frag);
 
 	}
-
-
-	// @TODO: emit action -> instagib + params
-	// @TODO: user respawn @ center
 
 }
 
