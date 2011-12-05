@@ -59,6 +59,27 @@
 
 	});
 
+
+	/*
+		ACTION
+	*/
+	s.on('action' , function (data) {
+
+		console.log('SHOT');
+
+		if (data.action == 'instagib') {
+			
+			shoot_laser( data.id, data.direction );
+
+		}
+
+
+
+	});
+
+
+
+
 	/*
 		SAYGLOBAL INFO
 	*/
@@ -199,6 +220,9 @@ function shoot_laser(user_id, direction) {
 	var user = $('#' + user_id);
 
 	var pos = user.offset();
+
+
+	console.log('SHOOTING', direction);
 
 	if (direction == 'left') {
 

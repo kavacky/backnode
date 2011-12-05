@@ -154,7 +154,8 @@ io.sockets.on('connection', function (socket) {
 	socket.on('action', function(action) {
 
 		if (users[socket.id] != undefined && !users[socket.id].action_lock) {
-		
+
+
 			switch(action) {
 				case 'instagib':
 
@@ -259,7 +260,7 @@ function broadcast_instagib(killer, victim) {
 		var pos = {};
 		pos[killer] = {
 			id : killer,
-			action: 'instagib';
+			action: 'instagib',
 			direction : users[killer].direction,
 		};
 
