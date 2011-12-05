@@ -45,6 +45,20 @@
 		update_positions(data);
 	});
 	
+
+	/*
+		REMOVE
+	*/
+	s.on('remove' , function (data) {
+
+		$('#' + data.id).fadeOut(1500, function() {
+			$(this).remove();
+		});
+		
+		conlog(data.name + ' left the world!');
+
+	});
+
 	/*
 		SAYGLOBAL INFO
 	*/

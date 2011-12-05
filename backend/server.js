@@ -106,8 +106,25 @@ io.sockets.on('connection', function (socket) {
 
 	// DISCONNECT
 	socket.on('disconnect', function() {
+
+		
+		if (users[socket.id] != undefined) {
+
+			var user = {};
+
+			var user = {
+				id : socket.id,
+				name : users[socket.id].name
+			};			
+
+			io.sockets.emit('remove', user );
+		}
+
+
+
 		disconnect(socket);
 
+		
 	});
 
 });
