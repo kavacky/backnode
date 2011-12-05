@@ -1,17 +1,21 @@
 io = require('socket.io').listen(81);
 
+io.set('log level', 1);
+
+
+
 var users = {};
 var talk = [];
 
-
+talk[9] = 'LOL';
 talk[1] = 'BITCHES';
 talk[2] = 'LITTLE PUSSIES';
 talk[3] = 'MOTHERFUCKERS';
-talk[4] = 'MIDGET SEX';
+talk[4] = 'MIDGET SEX :D';
 talk[5] = 'DO YOU HAVE A PROBLEM?';
 talk[6] = 'WALK AWAY!';
 talk[7] = 'YOU ALL GOING TO DIE!!';
-
+talk[8] = 'NOOBS';
 
 // add boss
 users['boss'] = {
@@ -20,7 +24,9 @@ users['boss'] = {
 	y : 20,
 	name : 'CEO',
 	move_lock : false,
-	sprite : 'mob.gif'
+	sprite : 'mob.gif',
+	frags : 0,
+	deaths : 0
 };
 
 
@@ -34,7 +40,7 @@ function mob_say() {
 	io.sockets.emit('say', {
 		id : 'boss',
 		name : users['boss'].name,
-		message : talk[Math.floor(Math.random()*7)],
+		message : talk[1 + Math.floor(Math.random()*8)],
 		time : date.getHours() + ':' + date.getMinutes()
 	} );	
 
@@ -69,12 +75,27 @@ function mob_walk() {
 	broadcast_user_position('boss');
 
 
-	setTimeout(mob_walk, Math.floor(Math.random()*1000));	
+	setTimeout(mob_walk, Math.floor(Math.random()*300));	
 }
 
 
 mob_say();
 mob_walk();
+
+
+function users_online() {
+
+	var json = {};
+	for(i in users) {
+	
+		json[i] = {
+			name: users[i].name
+		}
+		
+	}	
+
+	console.log('Users online: ',  json );
+}
 
 
 /*
@@ -112,8 +133,12 @@ io.sockets.on('connection', function (socket) {
 
 		socket.emit('positions', send_positions() );
 
+		broadcast_scoretable();
+
 		ping(socket);
 
+
+		users_online();
 
 	});
 
@@ -261,6 +286,8 @@ io.sockets.on('connection', function (socket) {
 
 		disconnect(socket);
 		
+		users_online();
+
 	});
 
 });
@@ -330,7 +357,7 @@ function broadcast_instagib(killer, victim) {
 		users[victim].direction = 'down';
 		users[victim].move_lock = false;
 		users[victim].action_lock = false;
-		users[victim].deaths -= 1;
+		users[victim].deaths += 1;
 		
 		users[killer].frags += 1;
 		
@@ -365,7 +392,8 @@ function broadcast_scoretable() {
 		json[i] = {
 			id : i,
 			frags: users[i].frags,
-			deaths: users[i].deaths
+			deaths: users[i].deaths,
+			name : users[i].name
 		}
 		
 		if (leader.frags < users[i].frags) {

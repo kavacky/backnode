@@ -59,6 +59,24 @@
 
 	});
 
+	/*
+		scoretable
+	*/
+	s.on('scoretable' , function (data) {
+
+		$('.board').html('<li><span>Name</span><b>Kills</b><i>Deaths</li></li>');
+
+		for (var i in data) {
+			
+			var user = data[i];	
+
+			$('.board').append('<li><span>' + user.name + '</span><b>' + user.frags + '</b><i>'+user.deaths+'</i></span>');
+
+		}
+
+	});
+
+
 
 	/*
 		ACTION
@@ -169,6 +187,8 @@ function connect()
 	$$('splash').style.display = 'none';
 	$$('console').style.display = 'block';
 	$$('field').style.display = 'block';
+	
+	$('.board').show();	
 }
 
 document.onkeyup = function(e)
@@ -282,7 +302,7 @@ function shoot_laser(user_id, direction) {
 	}
 
 	if (direction == 'down') {
-		$('body').append('<div class="laser laser_v" style="top: '+(pos.top + 33)+'px; left: ' + (pos.left + 25)  +'px; height: 100%;" id="laser_'+ user_id +'" />');
+		$('body').append('<div class="laser laser_v" style="top: '+(pos.top + 33)+'px; left: ' + (pos.left + 25)  +'px; bottom: 0;" id="laser_'+ user_id +'" />');
 
 		$('body .laser:last').fadeOut(400, function() { $(this).remove() });
 	}	
@@ -325,7 +345,7 @@ body, html {
 	background: url(../img/bg.png);
 	overflow: hidden;
 	border: 3px solid black;
-	border-top: none;
+	border-top: none;	
 }
 
 
@@ -402,6 +422,41 @@ body, html {
 
 
 
+.board {
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	right: 10px;
+	top: 289px;
+	width: 200px;
+	min-height: 20px;
+	border-radius: 6px;
+	background: rgba(0,0,0, 0.8);
+	display: none;
+}
+.board li {
+	display: block;
+	padding: 5px;
+	font-size: 12px;
+	overflow: hidden;
+	color: green;
+}
+.board li span {
+	float: left;
+	width: 110px;
+	color: #FFF;
+}
+.board li b {
+	float: left;
+	width: 40px;
+	color: green;
+}
+.board li i {
+	float: left;
+	width: 40px;	
+	color: red;
+	font-style: normal;
+}
 
 </style>
 
@@ -419,6 +474,9 @@ body, html {
 		<div id="field" style="display: none">
 		</div>
 
+
+		<div class="board">
+		</div>
 
 	</body>
 </html>
