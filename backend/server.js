@@ -21,11 +21,11 @@ function mob_say() {
 	io.sockets.emit('say', {
 		id : 'boss',
 		name : mob.name,
-		message : talk[Math.floor(Math.random()*8)],
+		message : talk[Math.floor(Math.random()*7)],
 		time : date.getHours() + ':' + date.getMinutes()
 	} );	
 
-	setTimeout(mob_say, Math.floor(Math.random()*14000));
+	setTimeout(mob_say, 5000 + Math.floor(Math.random()*10000));
 }
 
 

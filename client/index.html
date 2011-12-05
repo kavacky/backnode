@@ -191,6 +191,23 @@ function update_positions(users) {
 }
 
 
+function shoot_laser(user_id, direction) {
+	
+	var user = $('#' + user_id);
+
+	var pos = user.offset();
+
+	if (direction == 'left') {
+
+		$('body').append('<div class="laser_h" style="top: '+(pos.top+27)+'px; right: ' + (pos.left-20)  +'px; left: 0" id="laser_'+ user_id +'" />');
+
+	}
+
+
+	
+
+
+}
 
 
 
@@ -272,6 +289,25 @@ body, html {
 }
 
 
+
+.laser_h {
+	height: 2px;
+	background: red;
+	position: absolute;
+	top: 500px;
+	left: 100px;
+	z-index: 999px;
+}
+
+.laser_v {
+	width: 2px;
+	background: red;
+	position: absolute;
+	top: 500px;
+	left: 100px;
+	z-index: 999px;
+}
+
 </style>
 
 		<div id="splash">
@@ -287,6 +323,6 @@ body, html {
 
 		<div id="field" style="display: none">
 		</div>
-		
+
 	</body>
 </html>
