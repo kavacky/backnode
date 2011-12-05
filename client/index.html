@@ -16,7 +16,7 @@
 		PINGING
 	*/
 	s.on('ping', function (data) {
-		console.log('ping received: ' + data + '; ponged back');
+		//console.log('ping received: ' + data + '; ponged back');
 		s.emit('pong', data);
 		//conlog('Ping? Pong!');
 	});
@@ -25,7 +25,7 @@
 		DISCONNECTED
 	*/
 	s.on('disconnect' , function (data) {
-		console.log('Disconnected by server :( (' + data + ')');
+		//console.log('Disconnected by server :( (' + data + ')');
 		conlog('Disconnected by server! (' + data + ')');
 	});
 	
@@ -33,7 +33,7 @@
 		GLOBAL INFO
 	*/
 	s.on('info' , function (data) {
-		console.log('Info: ' + data);
+		//console.log('Info: ' + data);
 		conlog(data);
 	});
 	
@@ -41,7 +41,7 @@
 		MOVED
 	*/
 	s.on('move' , function (data) {
-		console.log('Moved: ', data);
+		//console.log('Moved: ', data);
 		update_positions(data);
 	});
 	
@@ -63,7 +63,7 @@
 		SAYGLOBAL INFO
 	*/
 	s.on('say' , function (data) {
-		console.log('Say; ', data);
+		//console.log('Say; ', data);
 		conlog(data.name + ' says: ' + data.message);
 
 
@@ -90,7 +90,7 @@
 		INIT ALL USERS
 	*/
 	s.on('positions', function (data) {
-		console.log(data);
+		//console.log(data);
 		update_positions(data);
 	});
 	
@@ -149,7 +149,7 @@ document.onkeyup = function(e)
 function update_positions(users) {
 	
 
-	console.log(users);
+	//console.log(users);
 
 	for (var i in users) {
 		
