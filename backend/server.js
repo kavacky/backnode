@@ -227,7 +227,7 @@ io.sockets.on('connection', function (socket) {
 				case 'instagib':
 
 					users[socket.id].action_lock = true;
-					clear_action(socket.id, 100);
+					clear_action(socket.id, 1500);
 				
 					if (users[socket.id].direction == 'right') {
 						for(i in users) {
