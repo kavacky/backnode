@@ -253,7 +253,7 @@ function update_positions(users) {
 
 		if (!char_dom.length) {
 
-			var sprite = (i=='boss') ? 'mob.gif' : 'down.gif';
+			var sprite = (i=='boss') ? 'mob_left.gif' : 'down.gif';
 
 			$('#field').append('<div class="char' + ((i=='boss') ? ' boss' : '') + '" id="' + user.id + '"><span>'+user.name+'</span><img src="../img/'+sprite+'" /></div>')			
 			var char_dom = $('#' + user.id);
@@ -261,14 +261,12 @@ function update_positions(users) {
 			char_dom.css('left', user.x + '%');			
 		}
 
+		var img = char_dom.find('img');
+		var old_x = parseInt(char_dom[0].style.left);
+		var old_y = parseInt(char_dom[0].style.top);
+
+
 		if (i != 'boss') {
-
-			var img = char_dom.find('img');
-
-
-			var old_x = parseInt(char_dom[0].style.left);
-			var old_y = parseInt(char_dom[0].style.top);
-
 			if (old_x > user.x) {
 				img.attr('src', '../img/left.gif');
 			}
@@ -281,7 +279,15 @@ function update_positions(users) {
 			if (old_y > user.y) {
 				img.attr('src', '../img/up.gif');
 			}		
-		}	
+		}
+		else {
+			if (old_x > user.x) {
+				img.attr('src', '../img/mob_left.gif');
+			}
+			if (old_x < user.x) {
+				img.attr('src', '../img/mob_right.gif');
+			}				
+		}
 
 		char_dom.css('top', user.y + '%');
 		char_dom.css('left', user.x + '%');
