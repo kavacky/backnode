@@ -276,6 +276,8 @@ function update_positions(users) {
 
 			$('#field').append('<div class="char' + ((i=='boss') ? ' boss' : '') + '" id="' + user.id + '"><span>'+user.name+'</span><img src="../img/'+sprite+'" /></div>')			
 			var char_dom = $('#' + user.id);
+
+
 			char_dom.css('top', user.y + '%');
 			char_dom.css('left', user.x + '%');			
 		}
@@ -308,8 +310,14 @@ function update_positions(users) {
 			}				
 		}
 
-		char_dom.css('top', user.y + '%');
-		char_dom.css('left', user.x + '%');
+		//char_dom.css('top', user.y + '%');
+		//char_dom.css('left', user.x + '%');
+
+		char_dom.animate({
+			top : user.y + '%',
+			left : user.x + '%'
+		}, 150);
+
 
 	}
 
@@ -402,6 +410,7 @@ body {
 	font-size: 12px;
 	padding: 5px;
 	color: gray;
+	z-index: 9999999;
 	border-bottom: 3px solid black;
 }
 
@@ -471,7 +480,7 @@ body {
 	position: absolute;
 	top: 500px;
 	left: 100px;
-	z-index: 999px;
+	z-index: 9;
 }
 
 .laser_v {
@@ -480,7 +489,7 @@ body {
 	position: absolute;
 	top: 500px;
 	left: 100px;
-	z-index: 999px;
+	z-index: 9;
 }
 
 
@@ -502,6 +511,7 @@ body {
 	border-radius: 6px;
 	background: rgba(0,0,0, 0.8);
 	display: none;
+	z-index: 99999;
 }
 .board li {
 	display: block;
@@ -538,7 +548,6 @@ body {
 		<div id="console">
 			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 236px;"></div>
 			<form><input type="text" id="cmd" value="say"> <input type="text" id="param" value=""> <input type="submit" name="submit" value="Send" onclick="if (ingame) { s.emit(document.getElementById('cmd').value, document.getElementById('param').value); } return false;"></form>
-			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
 		</div>
 	
 

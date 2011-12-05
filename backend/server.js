@@ -16,13 +16,16 @@ talk[5] = 'DO YOU HAVE A PROBLEM?';
 talk[6] = 'WALK AWAY!';
 talk[7] = 'YOU ALL GOING TO DIE!!';
 talk[8] = 'NOOBS';
+talk[9] = 'I\'M THE BAUSS';
+talk[10] = 'I ROBOT';
+talk[11] = 'LOOK AT MY MASK';
 
 // add boss
 users['boss'] = {
 	id : 'boss',
 	x : 30,
 	y : 20,
-	name : 'CEO',
+	name : 'TEH BAU55',
 	move_lock : false,
 	sprite : 'mob.gif',
 	frags : 0,
@@ -40,7 +43,7 @@ function mob_say() {
 	io.sockets.emit('say', {
 		id : 'boss',
 		name : users['boss'].name,
-		message : talk[1 + Math.floor(Math.random()*8)],
+		message : talk[1 + Math.floor(Math.random()*11)],
 		time : date.getHours() + ':' + date.getMinutes()
 	} );	
 
