@@ -217,6 +217,10 @@ document.onkeyup = function(e)
 			s.emit('action', 'instagib');
 		break;
 		
+		case 84:
+			s.emit('say', prompt('Say:', ''));
+		break;
+		
 		case 27:
 			window.alert('quitting?');
 		break;
