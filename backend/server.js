@@ -155,6 +155,7 @@ io.sockets.on('connection', function (socket) {
 
 		if (users[socket.id] != undefined && !users[socket.id].action_lock) {
 
+			broadcast_action(socket.id, action);
 
 			switch(action) {
 				case 'instagib':
@@ -253,33 +254,45 @@ function broadcast_user_position(user_id) {
 	io.sockets.emit('move',  pos );
 }
 
-function broadcast_instagib(killer, victim) {
+function broadcast_action(user_id, action) {
 
-	if (users[killer] != undefined) {
+	if (users[user_id] != undefined) {
 
 		var pos = {};
-		pos[killer] = {
-			id : killer,
-			action: 'instagib',
-			direction : users[killer].direction,
+		pos[user_id] = {
+			id : user_id,
+			action: action,
+			direction : users[user_id].direction
 		};
 
 		io.sockets.emit('action',  pos);
 		
 	}
+}
+
+function broadcast_instagib(killer, victim) {
 
 	if (users[victim] != undefined) {
 		
-		io.sockets.emit('info', users[killer].name + ' killed ' + users[victim].name);
-
 		users[victim].x = 50;
 		users[victim].y = 50;
 		users[victim].direction = 'down';
 		users[victim].move_lock = false;
 		users[victim].action_lock = false;
 		
-		broadcast_user_position(victim);
-
+		var frag = {};
+		frag[victim] = {
+			id : victim,
+			killer: killer,
+			weapon: 'instagib',
+			new_x: users[victim].x,
+			new_y: users[victim].y
+		};
+		
+		//io.sockets.emit('info', users[killer].name + ' killed ' + users[victim].name);
+		//broadcast_user_position(victim);
+		
+		io.sockets.emit('frag', frag);
 
 	}
 
