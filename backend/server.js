@@ -22,7 +22,9 @@ io.sockets.on('connection', function (socket) {
 		users[socket.id] = {};
 		users[socket.id].x = 50;
 		users[socket.id].y = 50;
+		users[socket.id].direction = 'down';
 		users[socket.id].move_lock = false;
+		users[socket.id].action_lock = false;
 		users[socket.id].name = nickname;
 
 		socket.emit('ready', 'ok');
@@ -63,6 +65,7 @@ io.sockets.on('connection', function (socket) {
 
 					if (users[socket.id].y > 0) {
 						users[socket.id].y -= 1;
+						users[socket.id].direction = 'up';
 						users[socket.id].move_lock = true;
 						clear_move(socket.id);
 						broadcast_user_position(socket.id);
@@ -73,6 +76,7 @@ io.sockets.on('connection', function (socket) {
 
 					if (users[socket.id].y < 100) {
 						users[socket.id].y += 1;
+						users[socket.id].direction = 'down';
 						users[socket.id].move_lock = true;	
 						clear_move(socket.id);	
 						broadcast_user_position(socket.id);						
@@ -83,6 +87,7 @@ io.sockets.on('connection', function (socket) {
 
 					if (users[socket.id].x > 0) {
 						users[socket.id].x -= 1;
+						users[socket.id].direction = 'left';
 						users[socket.id].move_lock = true;
 						clear_move(socket.id);	
 						broadcast_user_position(socket.id);
@@ -93,6 +98,7 @@ io.sockets.on('connection', function (socket) {
 
 					if (users[socket.id].x < 100) {
 						users[socket.id].x += 1;
+						users[socket.id].direction = 'right';
 						users[socket.id].move_lock = true;	
 						clear_move(socket.id);	
 						broadcast_user_position(socket.id);
@@ -100,6 +106,56 @@ io.sockets.on('connection', function (socket) {
 					break;
 												
 				default:
+
+			}
+		}
+
+	});
+	
+	// ACTION
+	socket.on('action', function(action) {
+
+		if (users[socket.id] != undefined && !users[socket.id].action_lock) {
+
+			switch(action) {
+				case 'instagib':
+				
+					users[socket.id].action_lock = true;
+					clear_action(socket.id, 100);
+				
+					if (users[socket.id].direction == 'right') {
+						for(i in users) {
+							if (users[i].y == users[socket.id].y && users[i].x > users[socket.id].x) {
+								broadcast_instagib(users[socked.id], users[i]);
+							}
+						}
+					}
+					else if (users[socket.id].direction == 'left') {
+						for(i in users) {
+							if (users[i].y == users[socket.id].y && users[i].x < users[socket.id].x) {
+								broadcast_instagib(users[socked.id], users[i]);
+							}
+						}
+					}
+					else if (users[socket.id].direction == 'up') {
+						for(i in users) {
+							if (users[i].x == users[socket.id].x && users[i].y < users[socket.id].y) {
+								broadcast_instagib(users[socked.id], users[i]);
+							}
+						}
+					}
+					else if (users[socket.id].direction == 'down') {
+						for(i in users) {
+							if (users[i].x == users[socket.id].x && users[i].y > users[socket.id].y) {
+								broadcast_instagib(users[socked.id], users[i]);
+							}
+						}
+					}
+					
+					break;
+
+			default:
+				// No action
 
 			}
 		}
@@ -138,6 +194,12 @@ function clear_move(user_id) {
 	}, 100);
 }
 
+function clear_action(user_id, timeout = 100) {
+	setTimeout(function() {
+		users[user_id].action_lock = false;
+	}, timeout);
+}
+
 
 function broadcast_user_position(user_id) {
 
@@ -150,6 +212,12 @@ function broadcast_user_position(user_id) {
 	};
 
 	io.sockets.emit('move',  pos );
+}
+
+function broadcast_instagib(killer, victim) {
+
+	io.sockets.emit('info', killer.nickname + ' killed ' + victim.nickname);
+
 }
 
 /* Generete user positions */
