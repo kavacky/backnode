@@ -54,7 +54,9 @@ io.sockets.on('connection', function (socket) {
 	// MOVE
 	socket.on('move', function(direction) {
 
-		if (!users[socket.id].move_lock) {
+
+
+		if (users[socket.id] != undefined && !users[socket.id].move_lock) {
 
 			switch(direction) {
 				case 'up':
