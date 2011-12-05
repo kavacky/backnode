@@ -26,7 +26,8 @@ users['boss'] = {
 	move_lock : false,
 	sprite : 'mob.gif',
 	frags : 0,
-	deaths : 0
+	deaths : 0,
+	spree: 0
 };
 
 
@@ -126,6 +127,7 @@ io.sockets.on('connection', function (socket) {
 		users[socket.id].name = nickname;
 		users[socket.id].frags = 0;
 		users[socket.id].deaths = 0;
+		users[socket.id].spree = 0;
 
 		socket.emit('ready', 'ok');
 
@@ -229,6 +231,8 @@ io.sockets.on('connection', function (socket) {
 			switch(action) {
 			
 				case 'instagib':
+				
+					var bodycount = 0;
 
 					users[socket.id].action_lock = true;
 					clear_action(socket.id, 1500);
@@ -236,7 +240,8 @@ io.sockets.on('connection', function (socket) {
 					if (users[socket.id].direction == 'right') {
 						for(i in users) {
 							if (users[i].y == users[socket.id].y && users[i].x > users[socket.id].x) {
-								
+								bodycount++;
+								users[socket.id].spree++;
 								broadcast_instagib(socket.id, i);
 							}
 						}
@@ -244,6 +249,8 @@ io.sockets.on('connection', function (socket) {
 					else if (users[socket.id].direction == 'left') {
 						for(i in users) {
 							if (users[i].y == users[socket.id].y && users[i].x < users[socket.id].x) {
+								bodycount++;
+								users[socket.id].spree++;
 								broadcast_instagib(socket.id, i);
 							}
 						}
@@ -251,6 +258,8 @@ io.sockets.on('connection', function (socket) {
 					else if (users[socket.id].direction == 'up') {
 						for(i in users) {
 							if (users[i].x == users[socket.id].x && users[i].y < users[socket.id].y) {
+								bodycount++;
+								users[socket.id].spree++;
 								broadcast_instagib(socket.id, i);
 							}
 						}
@@ -258,10 +267,15 @@ io.sockets.on('connection', function (socket) {
 					else if (users[socket.id].direction == 'down') {
 						for(i in users) {
 							if (users[i].x == users[socket.id].x && users[i].y > users[socket.id].y) {
+								bodycount++;
+								users[socket.id].spree++;
 								broadcast_instagib(socket.id, i);
 							}
 						}
 					}
+					
+					broadcast_multikill(socket.id, bodycount);
+					broadcast_killing_spree(socket.id);
 					
 					break;
 
@@ -371,6 +385,7 @@ function broadcast_instagib(killer, victim) {
 		users[victim].move_lock = false;
 		users[victim].action_lock = false;
 		users[victim].deaths += 1;
+		users[victim].spree = 0;
 		
 		users[killer].frags += 1;
 		
@@ -419,6 +434,78 @@ function broadcast_scoretable() {
 	io.sockets.emit('scoretable', json);
 	io.sockets.emit('pwnerer', leader);
 	
+}
+
+/*
+	DOUBLEKILL! MULTIKILL!
+*/
+function broadcast_multikill(user_id, bodycount) {
+	
+	if (users[user_id] != undefined) {
+	
+		var killinfo = {};
+		killinfo = {
+			id: user_id,
+			multi: '';
+		}
+	
+		if (bodycount == 2) {
+			killinfo = 'DOUBLEKILL!';
+		}
+		else if (bodycount == 3) {
+			killinfo = 'MULTIKILL!';
+		}
+		else if (bodycount == 4) {
+			killinfo = 'ULTRAKILL!';
+		}
+		else if (bodycount == 2) {
+			killinfo = 'M-M-MONSTER KILL!!!';
+		}
+		
+		io.sockets.emit('multikill', killinfo);
+		
+	}
+}
+
+/*
+	GODLIKE!
+*/
+function broadcast_killing_spree(user_id) {
+	
+	if (users[user_id] != undefined) {
+		
+		var nospree = false;
+		
+		var spreeinfo = {};
+		spreeinfo = {
+			id: user_id,
+			spree: '';
+		}
+	
+		if (users[user_id].spree >= 25) {
+			spreeinfo = 'GODLIKE!';
+		}
+		else if (users[user_id].spree >= 20) {
+			spreeinfo = 'UNSTOPPABLE!';
+		}
+		else if (users[user_id].spree >= 15) {
+			spreeinfo = 'RAMPAGE!';
+		}
+		else if (users[user_id].spree >= 10) {
+			spreeinfo = 'DOMINATING!';
+		}
+		else if (users[user_id].spree >= 5) {
+			spreeinfo = 'KILLING SPREE!';
+		}
+		else {
+			nospree = true;
+		}
+		
+		if (!nospree) {
+			io.sockets.emit('killingspree', spreeinfo);
+		}
+		
+	}
 }
 
 /* Generete user positions */

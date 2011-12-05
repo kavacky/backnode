@@ -140,7 +140,7 @@
 
 
 	/*
-		SAYGLOBAL INFO
+		FRAG
 	*/
 	s.on('frag' , function (data) {
 
@@ -168,6 +168,44 @@
 
 
 
+
+	});
+	
+	/*
+		MULTIKILL
+	*/
+	s.on('multikill' , function (data) {
+
+		/*
+		
+			<div class="multikill">DOUBLEKILL!</div>
+			<div class="killing_spree">KILLING SPREE!</div>
+		
+		
+		var user = $('#' + data.id);
+
+		var pos = user.offset();
+
+
+		$('body').append('<img style="top: '+(pos.top-130)+'px; left: '+(pos.left-5)+'px" class="exp" src="../img/explosion2.gif" />');
+
+		var last = $('body img.exp:last');
+
+		setTimeout(function() {
+			
+			last.remove();
+
+		}, 1000);
+
+		user.css({
+			left : data.new_x + '%',
+			top : data.new_y + '%'
+		});
+
+		conlog( $('#' + data.killer + ' span').text() + ' killed ' + $('#' + data.id + ' span').text() );
+
+
+*/
 
 	});
 
@@ -519,6 +557,26 @@ body {
 	width: 40px;	
 	color: red;
 	font-style: normal;
+}
+
+.multikill
+{
+	font-size: 50px;
+	position: absolute;
+	z-index: 99999999;
+	width: 100%;
+	text-align: center;
+	color: #F00;
+}
+
+.killing_spree
+{
+	font-size: 50px;
+	position: absolute;
+	z-index: 99999999;
+	width: 100%;
+	text-align: center;
+	color: #00F;
 }
 
 </style>
