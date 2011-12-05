@@ -68,6 +68,8 @@ io.sockets.on('connection', function (socket) {
 		users[socket.id].move_lock = false;
 		users[socket.id].action_lock = false;
 		users[socket.id].name = nickname;
+		users[socket.id].frags = 0;
+		users[socket.id].deaths = 0;
 
 		socket.emit('ready', 'ok');
 
@@ -170,6 +172,7 @@ io.sockets.on('connection', function (socket) {
 					if (users[socket.id].direction == 'right') {
 						for(i in users) {
 							if (users[i].y == users[socket.id].y && users[i].x > users[socket.id].x) {
+								
 								broadcast_instagib(socket.id, i);
 							}
 						}
@@ -285,13 +288,16 @@ function broadcast_action(user_id, action) {
 */
 function broadcast_instagib(killer, victim) {
 
-	if (users[victim] != undefined) {
+	if (users[victim] != undefined && users[killer] != undefined) {
 		
 		users[victim].x = 50;
 		users[victim].y = 50;
 		users[victim].direction = 'down';
 		users[victim].move_lock = false;
 		users[victim].action_lock = false;
+		users[victim].deaths -= 1;
+		
+		users[killer].frags += 1;
 		
 		var frag = {};
 		frag = {
@@ -302,13 +308,41 @@ function broadcast_instagib(killer, victim) {
 			new_y: users[victim].y
 		};
 		
-		//io.sockets.emit('info', users[killer].name + ' killed ' + users[victim].name);
-		//broadcast_user_position(victim);
-		
 		io.sockets.emit('frag', frag);
+		
+		broadcast_scoretable();
 
 	}
 
+}
+
+/*
+	Send new scores
+*/
+function broadcast_scoretable() {
+	
+	var leader = {name: '', frags: 0};
+	
+	// Scoreboard
+	var json = {};
+	for(i in users) {
+	
+		json[i] = {
+			id : i,
+			frags: users[i].frags,
+			deaths: users[i].deaths
+		}
+		
+		if (leader.frags < users[i].frags) {
+			leader.name = users[i].name;
+			leader.frags = users[i].frags;
+		}
+		
+	}
+
+	io.sockets.emit('scoretable', json);
+	io.sockets.emit('pwnerer', leader);
+	
 }
 
 /* Generete user positions */
@@ -352,6 +386,7 @@ function ping(socket) {
 
 }
 
+/* Disconnect user */
 function disconnect(socket) {
 	
 	if (users[socket.id] != undefined) {
