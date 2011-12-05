@@ -164,28 +164,28 @@ io.sockets.on('connection', function (socket) {
 					if (users[socket.id].direction == 'right') {
 						for(i in users) {
 							if (users[i].y == users[socket.id].y && users[i].x > users[socket.id].x) {
-								broadcast_instagib(users[socked.id], users[i]);
+								broadcast_instagib(socket.id, i);
 							}
 						}
 					}
 					else if (users[socket.id].direction == 'left') {
 						for(i in users) {
 							if (users[i].y == users[socket.id].y && users[i].x < users[socket.id].x) {
-								broadcast_instagib(users[socked.id], users[i]);
+								broadcast_instagib(socket.id, i);
 							}
 						}
 					}
 					else if (users[socket.id].direction == 'up') {
 						for(i in users) {
 							if (users[i].x == users[socket.id].x && users[i].y < users[socket.id].y) {
-								broadcast_instagib(users[socked.id], users[i]);
+								broadcast_instagib(socket.id, i);
 							}
 						}
 					}
 					else if (users[socket.id].direction == 'down') {
 						for(i in users) {
 							if (users[i].x == users[socket.id].x && users[i].y > users[socket.id].y) {
-								broadcast_instagib(users[socked.id], users[i]);
+								broadcast_instagib(socket.id, i);
 							}
 						}
 					}
@@ -232,7 +232,7 @@ function clear_move(user_id) {
 	}, 100);
 }
 
-function clear_action(user_id, timeout = 100) {
+function clear_action(user_id, timeout) {
 	setTimeout(function() {
 		users[user_id].action_lock = false;
 	}, timeout);
@@ -254,16 +254,23 @@ function broadcast_user_position(user_id) {
 
 function broadcast_instagib(killer, victim) {
 
-	io.sockets.emit('info', killer.nickname + ' killed ' + victim.nickname);
-	
-	users[victim.id].x = 50;
-	users[victim.id].y = 50;
-	users[victim.id].direction = 'down';
-	users[victim.id].move_lock = false;
-	users[victim.id].action_lock = false;
-	
-	broadcast_user_position(victim.id);
-	
+
+	if (users[victim] != undefined) {
+		
+		io.sockets.emit('info', users[killer].name + ' killed ' + users[victim].name);
+
+		users[victim].x = 50;
+		users[victim].y = 50;
+		users[victim].direction = 'down';
+		users[victim].move_lock = false;
+		users[victim].action_lock = false;
+		
+		broadcast_user_position(victim);
+
+
+	}
+
+
 	// @TODO: emit action -> instagib + params
 	// @TODO: user respawn @ center
 
