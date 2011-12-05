@@ -135,8 +135,11 @@ document.onkeyup = function(e)
 			s.emit('move', 'right');
 		break;
 		
+		case 32:
+			s.emit('action', 'instagib');
+		break;
+		
 		case 27:
-			//s.emit('move', 'up');
 			window.alert('quitting?');
 		break;
 	}
