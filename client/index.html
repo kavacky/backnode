@@ -11,7 +11,15 @@
 
 <script>
 
+	var ingame = false;
+	var say_lock = true;
+
 	$(document).ready(function() {
+	
+		$('input').focus(function() {say_lock = true;});
+		$('input').blur(function() {say_lock = false;});
+	
+		document.getElementById('nickname').focus();
 		
 		$('<img src="../img/explosion2.gif" />'); // preload
 
@@ -34,6 +42,8 @@
 	s.on('disconnect' , function (data) {
 		//console.log('Disconnected by server :( (' + data + ')');
 		conlog('Disconnected by server! (' + data + ')');
+		
+		ingame = false;
 	});
 	
 	/*
@@ -198,42 +208,51 @@ function connect()
 	$$('console').style.display = 'block';
 	$$('field').style.display = 'block';
 	
-	$('.board').show();	
+	$('.board').show();
+	
+	ingame = true;
+	say_lock = false;
 }
 
 document.onkeyup = function(e)
 {
-	e = e || window.event;
-	
-	switch (e.keyCode)
+	if ( ingame )
 	{
-		case 38:
-			s.emit('move', 'up');
-		break;
+		e = e || window.event;
+	
+		switch (e.keyCode)
+		{
+			case 38:
+				s.emit('move', 'up');
+			break;
 		
-		case 40:
-			s.emit('move', 'down');
-		break;
+			case 40:
+				s.emit('move', 'down');
+			break;
 		
-		case 37:
-			s.emit('move', 'left');
-		break;
+			case 37:
+				s.emit('move', 'left');
+			break;
 		
-		case 39:
-			s.emit('move', 'right');
-		break;
+			case 39:
+				s.emit('move', 'right');
+			break;
 		
-		case 32:
-			s.emit('action', 'instagib');
-		break;
+			case 32:
+				s.emit('action', 'instagib');
+			break;
 		
-		case 84:
-			s.emit('say', prompt('Say:', ''));
-		break;
+			case 84:
+				if (!say_lock)
+				{
+					s.emit('say', prompt('Say:', ''));
+				}
+			break;
 		
-		case 27:
-			window.alert('quitting?');
-		break;
+			case 27:
+				window.alert('quitting?');
+			break;
+		}
 	}
 }
 
@@ -507,12 +526,12 @@ body {
 
 		<div id="splash">
 			<h1>BackNode Chat <b>v0.1337</b></h1>
-			Enter your name: &nbsp; <input type="text" id="nickname"> <input type="submit" onclick="connect(); return false;" value="Join!">
+			<form>Enter your name: &nbsp; <input type="text" id="nickname" tabindex="1"> <input type="submit" onclick="connect(); return false;" value="Join!" tabindex="2"></form>
 		</div>
 		
 		<div id="console">
 			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 236px;"></div>
-			<input type="text" id="cmd" value="say"> <input type="text" id="param" value=""> <input type="submit" name="submit" value="Send" onclick="s.emit(document.getElementById('cmd').value, document.getElementById('param').value); return false;">
+			<form><input type="text" id="cmd" value="say"> <input type="text" id="param" value=""> <input type="submit" name="submit" value="Send" onclick="if (ingame) { s.emit(document.getElementById('cmd').value, document.getElementById('param').value); } return false;"></form>
 			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
 		</div>
 	
