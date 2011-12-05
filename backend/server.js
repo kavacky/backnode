@@ -154,10 +154,10 @@ io.sockets.on('connection', function (socket) {
 	socket.on('action', function(action) {
 
 		if (users[socket.id] != undefined && !users[socket.id].action_lock) {
-
+		
 			switch(action) {
 				case 'instagib':
-				
+
 					users[socket.id].action_lock = true;
 					clear_action(socket.id, 100);
 				
@@ -254,6 +254,18 @@ function broadcast_user_position(user_id) {
 
 function broadcast_instagib(killer, victim) {
 
+	if (users[killer] != undefined) {
+
+		var pos = {};
+		pos[killer] = {
+			id : killer,
+			action: 'instagib';
+			direction : users[killer].direction,
+		};
+
+		io.sockets.emit('action',  pos);
+		
+	}
 
 	if (users[victim] != undefined) {
 		
