@@ -116,7 +116,7 @@
 
 		$('body').append('<img style="top: '+(pos.top+10)+'px; left: '+(pos.left+10)+'px" class="exp" src="../img/explosion.gif" />');
 
-		$('body img.exp:last').fadeOut(1000, function() {
+		$('body img.exp:last').fadeOut(1500, function() {
 			$(this).remove();
 		});
 
@@ -215,6 +215,8 @@ function update_positions(users) {
 
 		var char_dom = $('#' + user.id);
 
+	
+
 		if (!char_dom.length) {
 
 			var sprite = (i=='boss') ? 'mob.gif' : 'down.gif';
@@ -225,24 +227,27 @@ function update_positions(users) {
 			char_dom.css('left', user.x + '%');			
 		}
 
-		var img = char_dom.find('img');
+		if (i != 'boss') {
+
+			var img = char_dom.find('img');
 
 
-		var old_x = parseInt(char_dom[0].style.left);
-		var old_y = parseInt(char_dom[0].style.top);
+			var old_x = parseInt(char_dom[0].style.left);
+			var old_y = parseInt(char_dom[0].style.top);
 
-		if (old_x > user.x) {
-			img.attr('src', '../img/left.gif');
-		}
-		if (old_x < user.x) {
-			img.attr('src', '../img/right.gif');
-		}
-		if (old_y < user.y) {
-			img.attr('src', '../img/down.gif');
-		}
-		if (old_y > user.y) {
-			img.attr('src', '../img/up.gif');
-		}		
+			if (old_x > user.x) {
+				img.attr('src', '../img/left.gif');
+			}
+			if (old_x < user.x) {
+				img.attr('src', '../img/right.gif');
+			}
+			if (old_y < user.y) {
+				img.attr('src', '../img/down.gif');
+			}
+			if (old_y > user.y) {
+				img.attr('src', '../img/up.gif');
+			}		
+		}	
 
 		char_dom.css('top', user.y + '%');
 		char_dom.css('left', user.x + '%');
@@ -303,11 +308,12 @@ body, html {
 	top: 0;
 	left: 0;
 	right: 0;
-	height: 280px;
+	height: 267px;
 	background: gray;
 	font-size: 12px;
 	padding: 5px;
 	color: black;
+	border-bottom: 3px solid black;
 }
 
 #field {
@@ -316,8 +322,10 @@ body, html {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: url(../img/shrubbase.jpg);
+	background: url(../img/bg.png);
 	overflow: hidden;
+	border: 3px solid black;
+	border-top: none;
 }
 
 
@@ -402,7 +410,7 @@ body, html {
 		</div>
 		
 		<div id="console">
-			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 240px;"></div>
+			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 236px;"></div>
 			<input type="text" id="cmd" value="say"> <input type="text" id="param" value=""> <input type="submit" name="submit" value="Send" onclick="s.emit(document.getElementById('cmd').value, document.getElementById('param').value); return false;">
 			<div id="messages" style="margin: 0 0 5px 0; border-bottom: 1px solid #000; overflow-y: auto; height: 250px;"></div>
 		</div>

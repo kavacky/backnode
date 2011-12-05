@@ -12,7 +12,16 @@ talk[5] = 'DO YOU HAVE A PROBLEM?';
 talk[6] = 'WALK AWAY!';
 talk[7] = 'YOU ALL GOING TO DIE!!';
 
-var mob = {};
+// add boss
+users['boss'] = {
+	id : 'boss',
+	x : 30,
+	y : 20,
+	name : 'CEO',
+	move_lock : false,
+	sprite : 'mob.gif'
+};
+
 
 function mob_say() {
 	
@@ -20,7 +29,7 @@ function mob_say() {
 
 	io.sockets.emit('say', {
 		id : 'boss',
-		name : mob.name,
+		name : users['boss'].name,
 		message : talk[Math.floor(Math.random()*7)],
 		time : date.getHours() + ':' + date.getMinutes()
 	} );	
@@ -28,18 +37,42 @@ function mob_say() {
 	setTimeout(mob_say, 5000 + Math.floor(Math.random()*10000));
 }
 
+function mob_walk() {
 
-mob = {
-	id : 'boss',
-	x : 30,
-	y : 20,
-	name : 'TEH BOSS',
-	move_lock : false,
-	sprite : 'mob.gif'
-};
+
+	var rand1 = Math.floor(Math.random()*2);
+	var rand2 = Math.floor(Math.random()*3);
+
+	// x
+	if (rand1) {
+		if (rand2 == 0) {
+			users['boss'].x -= 1;
+		}
+		if (rand2 == 2) {
+			users['boss'].x += 1;
+		}		
+	} // y
+	else {
+		if (rand2 == 0) {
+			users['boss'].y -= 1;
+		}
+		if (rand2 == 2) {
+			users['boss'].y += 1;
+		}			
+	}
+
+	broadcast_user_position('boss');
+
+
+	setTimeout(mob_walk, Math.floor(Math.random()*1000));	
+}
+
+
 
 
 mob_say();
+mob_walk();
+
 
 io.sockets.on('connection', function (socket) {
 
@@ -314,7 +347,6 @@ function send_positions() {
 		}
 	}
 
-	json['boss'] = mob;
 
 	return json;
 }
